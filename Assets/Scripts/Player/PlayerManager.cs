@@ -1,18 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private PlayerController[] players;
+
     void Start()
     {
-        
+        players = this.transform.GetComponentsInChildren<PlayerController>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Input(float input, int id)
     {
-        
+        foreach (PlayerController player in players)
+            if (player.ID == id)
+                    player.ReceiveInput(input);
     }
 }
