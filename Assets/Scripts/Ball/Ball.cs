@@ -8,24 +8,23 @@ public class Ball : MonoBehaviour
     [SerializeField, Range(.001f, .5f)] private float rayLength;
     [SerializeField] private Transform[] vertexes;
     [SerializeField] private LayerMask objectMask;
-    [HideInInspector]public PlayerController lastHit;
+    private List<PlayerController> lastHit = new List<PlayerController>();
     private Rigidbody rb;
     private Vector3 direction;
     private float speed;
     
     void Start()
     {
-        Goal.Score += score;
         rb = this.GetComponent<Rigidbody>();
         throwBall();
     }
 
     private void throwBall()
     {
-        lastHit = null;
+        lastHit.Clear();
         speed = initialSpeed;
-        float x = Random.Range(1f, 0.3f) * (Random.Range(0,2) == 1? 1 : -1);
-        float z = Random.Range(1f, 0.3f) * (Random.Range(0,2) == 1? 1 : -1);
+        float x = Random.Range(0.3f, 1f) * (Random.Range(0,2) == 1? 1 : -1);
+        float z = Random.Range(0.3f, 1f) * (Random.Range(0,2) == 1? 1 : -1);
         direction = new Vector3(x, 0, z);
         direction.Normalize();
     }
@@ -57,24 +56,26 @@ public class Ball : MonoBehaviour
     private void savePlayer(List<RaycastHit> hits)
     {
         foreach (RaycastHit hit in hits)
-            if ((lastHit == null || lastHit.transform != hit.transform) && hit.transform.tag.Equals("Player"))
+            if ((lastHit.Count == 0 || lastHit[lastHit.Count-1].transform != hit.transform) && hit.transform.tag.Equals("Player"))
             {
                 speed += speedIncrement;
-                lastHit = hit.transform.GetComponent<PlayerController>();
+                lastHit.Add(hit.transform.GetComponent<PlayerController>());
             }
     }
 
-    private void score()
+    public void Score(int goalID)
     {
-        if (lastHit != null)
-            lastHit.Score();
+        int i = lastHit.Count - 1;
+        while (i >= 0)
+        {
+            if (goalID != lastHit[i].ID)
+            {
+                lastHit[i].Score();
+                break;
+            }
+        }
         transform.position = new Vector3(0f, transform.position.y, 0f);
         throwBall();
-    }
-
-    void OnDisable()
-    {
-        Goal.Score -= score;
     }
 
     void OnDrawGizmosSelected()

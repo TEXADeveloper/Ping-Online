@@ -3,11 +3,12 @@ using System;
 
 public class Goal : MonoBehaviour
 {
-    public static event Action Score;
+    [SerializeField] private Ball ballScript; 
+    public int goalID = 0;
 
     void OnTriggerEnter(Collider col)
     {
         if (col.tag.Equals("Ball"))
-            Score?.Invoke();
+            ballScript?.Score(goalID);
     }
 }
