@@ -1,15 +1,18 @@
 using UnityEngine;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
+    public int ID;
     [Header("General")]
     [SerializeField] private float speed = 3f;
     [SerializeField] private bool moveVertically = true;
+    [SerializeField] private TMP_Text scoreText;
     private Rigidbody rb;
 
-    public int ID;
     private int horizontal = 0;
     private int vertical = 0;
+    int score = 0;
 
     public void ReceiveInput(float value)
     { 
@@ -33,5 +36,11 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         rb.velocity = new Vector3(speed * horizontal, 0, speed * vertical);
+    }
+
+    public void Score()
+    {
+        score++;
+        scoreText.text = score.ToString();
     }
 }
