@@ -58,4 +58,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba59def1be506b04588a646f0583b311, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 0
+  ballScript: {fileID: 0}
+  GoalID: -1
